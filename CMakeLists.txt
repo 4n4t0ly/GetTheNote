@@ -8,13 +8,8 @@ qt_standard_project_setup()
 qt_add_executable(GetTheNote
     WIN32 MACOSX_BUNDLE
     src/main.cpp
-    src/dialog.cpp
-    include/dialog.h
-)
-
-qt_add_translations(
-    TARGETS GetTheNote
-    TS_FILES GetTheNote_en_LV.ts
+    src/mainwindow.cpp
+    include/mainwindow.h
 )
 
 target_link_libraries(GetTheNote
