@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QPushButton>
+#include <QFileDialog>
 
 class MainWindow : public QMainWindow
 {
