@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QPushButton>
+#include <QLabel>
 #include <QFileDialog>
 
 class MainWindow : public QMainWindow
@@ -15,6 +16,8 @@ public:
 private slots:
     void handleButton();
 private:
+    QString fileName;
     QPushButton *openButton;
+    QLabel *nameLabel;
 };
 #endif // MAINWINDOW_H
