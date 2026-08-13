@@ -5,6 +5,7 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QFileDialog>
+#include <QHBoxLayout>
 
 class MainWindow : public QMainWindow
 {
@@ -17,7 +18,16 @@ private slots:
     void handleButton();
 private:
     QString fileName;
+
+    QVBoxLayout *generalLayout;
     QPushButton *openButton;
     QLabel *nameLabel;
+
+    QWidget *centralWidget;
+    QPushButton *clearButton;
+    QPushButton *repeatButton;
+    QPushButton *goBackButton;
+    QPushButton *pauseButton;
+    QHBoxLayout *controlPanelLayout;
 };
 #endif // MAINWINDOW_H
