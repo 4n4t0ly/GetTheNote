@@ -19,14 +19,20 @@ MainWindow::MainWindow(QWidget *parent)
     connect(openButton, &QPushButton::released, this, &MainWindow::handleButton);
 
     clearButton = new QPushButton("Clear");
-    repeatButton = new QPushButton("Repeat");
+    repeatButton = new QPushButton("Play");
     goBackButton = new QPushButton("Go Back");
-    pauseButton = new QPushButton("Pause");
+    pauseButton = new QPushButton("...");
+
+    connect(pauseButton, &QPushButton::released, this, &MainWindow::playToPauseButton);
 
     controlPanelLayout->addWidget(clearButton);
     controlPanelLayout->addWidget(repeatButton);
     controlPanelLayout->addWidget(goBackButton);
     controlPanelLayout->addWidget(pauseButton);
+
+    player = new QMediaPlayer(this);
+    audioOutput = new QAudioOutput(this);
+    player->setAudioOutput(audioOutput);
 }
 void MainWindow::handleButton(){
     fileName = QFileDialog::getOpenFileName(this,
@@ -35,5 +41,18 @@ void MainWindow::handleButton(){
                                             tr("Audio Files (*.mp3)"));
     if(!fileName.isEmpty())
         nameLabel->setText(fileName);
+    pauseButton->setText("Play");
+    player->setSource(fileName);
+}
+void MainWindow::playToPauseButton(){
+    bool state = player->isPlaying();
+    if(!state){
+        pauseButton->setText("Pause");
+        player->play();
+    }
+    else{
+        pauseButton->setText("Resume");
+        player->pause();
+    }
 }
 MainWindow::~MainWindow() = default;

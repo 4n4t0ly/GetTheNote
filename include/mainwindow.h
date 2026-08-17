@@ -6,6 +6,8 @@
 #include <QLabel>
 #include <QFileDialog>
 #include <QHBoxLayout>
+#include <QMediaPlayer>
+#include <QAudioOutput>
 
 class MainWindow : public QMainWindow
 {
@@ -16,12 +18,16 @@ public:
     ~MainWindow() override;
 private slots:
     void handleButton();
+    void playToPauseButton();
 private:
     QString fileName;
 
     QVBoxLayout *generalLayout;
     QPushButton *openButton;
     QLabel *nameLabel;
+
+    QMediaPlayer *player;
+    QAudioOutput *audioOutput;
 
     QWidget *centralWidget;
     QPushButton *clearButton;
