@@ -8,6 +8,7 @@
 #include <QHBoxLayout>
 #include <QMediaPlayer>
 #include <QAudioOutput>
+#include <QSlider>
 
 class MainWindow : public QMainWindow
 {
@@ -19,6 +20,7 @@ public:
 private slots:
     void handleButton();
     void playToPauseButton();
+    void changeVolume();
 private:
     QString fileName;
 
@@ -35,5 +37,7 @@ private:
     QPushButton *goBackButton;
     QPushButton *pauseButton;
     QHBoxLayout *controlPanelLayout;
+
+    QSlider *volumeSlider;
 };
 #endif // MAINWINDOW_H

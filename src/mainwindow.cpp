@@ -1,6 +1,7 @@
 #include "../include/mainwindow.h"
 constexpr unsigned short int minWindowWidth = 600;
 constexpr unsigned short int minWindowHeigth = 350;
+constexpr unsigned short int volumeDivider = 9801;
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent){
     setMinimumSize(minWindowWidth, minWindowHeigth);
@@ -19,16 +20,19 @@ MainWindow::MainWindow(QWidget *parent)
     connect(openButton, &QPushButton::released, this, &MainWindow::handleButton);
 
     clearButton = new QPushButton("Clear");
-    repeatButton = new QPushButton("Play");
     goBackButton = new QPushButton("Go Back");
     pauseButton = new QPushButton("...");
+    repeatButton = new QPushButton("Repeat");
+    volumeSlider = new QSlider(Qt::Horizontal);
 
     connect(pauseButton, &QPushButton::released, this, &MainWindow::playToPauseButton);
+    connect(volumeSlider, &QSlider::valueChanged, this, &MainWindow::changeVolume);
 
     controlPanelLayout->addWidget(clearButton);
-    controlPanelLayout->addWidget(repeatButton);
     controlPanelLayout->addWidget(goBackButton);
     controlPanelLayout->addWidget(pauseButton);
+    controlPanelLayout->addWidget(repeatButton);
+    controlPanelLayout->addWidget(volumeSlider);
 
     player = new QMediaPlayer(this);
     audioOutput = new QAudioOutput(this);
@@ -46,13 +50,17 @@ void MainWindow::handleButton(){
 }
 void MainWindow::playToPauseButton(){
     bool state = player->isPlaying();
-    if(!state){
+    if(!state && !fileName.isEmpty()){
         pauseButton->setText("Pause");
+        changeVolume();
         player->play();
     }
-    else{
+    else if(!fileName.isEmpty()){
         pauseButton->setText("Resume");
         player->pause();
     }
+}
+void MainWindow::changeVolume(){
+    audioOutput->setVolume(pow(float(volumeSlider->value()),2)/volumeDivider);
 }
 MainWindow::~MainWindow() = default;
