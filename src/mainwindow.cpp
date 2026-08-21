@@ -17,15 +17,16 @@ MainWindow::MainWindow(QWidget *parent)
     generalLayout->addWidget(openButton);
     generalLayout->addWidget(nameLabel);
     generalLayout->addLayout(controlPanelLayout);
-    connect(openButton, &QPushButton::released, this, &MainWindow::handleButton);
+    connect(openButton, &QPushButton::clicked, this, &MainWindow::handleButton);
 
     clearButton = new QPushButton("Clear");
     goBackButton = new QPushButton("Go Back");
     pauseButton = new QPushButton("...");
-    repeatButton = new QPushButton("Repeat");
+    repeatButton = new QPushButton("No Repeat");
     volumeSlider = new QSlider(Qt::Horizontal);
 
-    connect(pauseButton, &QPushButton::released, this, &MainWindow::playToPauseButton);
+    connect(pauseButton, &QPushButton::clicked, this, &MainWindow::pauseButtonPress);
+    connect(repeatButton, &QPushButton::clicked, this, &MainWindow::repeatButtonPress);
     connect(volumeSlider, &QSlider::valueChanged, this, &MainWindow::changeVolume);
 
     controlPanelLayout->addWidget(clearButton);
@@ -37,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent)
     player = new QMediaPlayer(this);
     audioOutput = new QAudioOutput(this);
     player->setAudioOutput(audioOutput);
+    player->setLoops(QMediaPlayer::Infinite);
 }
 void MainWindow::handleButton(){
     fileName = QFileDialog::getOpenFileName(this,
@@ -48,19 +50,35 @@ void MainWindow::handleButton(){
     pauseButton->setText("Play");
     player->setSource(fileName);
 }
-void MainWindow::playToPauseButton(){
-    bool state = player->isPlaying();
-    if(!state && !fileName.isEmpty()){
+void MainWindow::pauseButtonPress(){
+    if(fileName.isEmpty())
+        return;
+    if(!playerStatus){
         pauseButton->setText("Pause");
         changeVolume();
         player->play();
     }
-    else if(!fileName.isEmpty()){
+    else{
         pauseButton->setText("Resume");
         player->pause();
     }
+    playerStatus = !playerStatus;
 }
 void MainWindow::changeVolume(){
     audioOutput->setVolume(pow(float(volumeSlider->value()),2)/volumeDivider);
+}
+void MainWindow::repeatButtonPress(){
+    if(repeat){
+        player->setLoops(QMediaPlayer::Once);
+        repeatButton->setText("Repeat");
+    }
+    else{
+        player->setLoops(QMediaPlayer::Infinite);
+        repeatButton->setText("No Repeat");
+    }
+    repeat = !repeat;
+}
+void MainWindow::goBackButtonPress(){
+
 }
 MainWindow::~MainWindow() = default;

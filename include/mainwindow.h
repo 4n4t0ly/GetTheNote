@@ -19,10 +19,14 @@ public:
     ~MainWindow() override;
 private slots:
     void handleButton();
-    void playToPauseButton();
+    void goBackButtonPress();
+    void pauseButtonPress();
+    void repeatButtonPress();
     void changeVolume();
 private:
     QString fileName;
+    bool repeat = true,
+         playerStatus = false;
 
     QVBoxLayout *generalLayout;
     QPushButton *openButton;
@@ -32,10 +36,8 @@ private:
     QAudioOutput *audioOutput;
 
     QWidget *centralWidget;
-    QPushButton *clearButton;
-    QPushButton *repeatButton;
-    QPushButton *goBackButton;
-    QPushButton *pauseButton;
+    QPushButton *clearButton, *repeatButton,
+                *goBackButton, *pauseButton;
     QHBoxLayout *controlPanelLayout;
 
     QSlider *volumeSlider;
